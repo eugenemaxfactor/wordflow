@@ -4,23 +4,20 @@ import type { FlashcardStore } from '../types/flashcard-store';
 export class MemoryFlashcardStore implements FlashcardStore {
   private cards: Flashcard[] = [];
 
-    getCards(): Flashcard[] {
+  getCards(): Flashcard[] {
     return this.cards.map((card) => {
-        return { ...card };
+      return { ...card };
     });
-    }
+  }
 
-    addCard(card: Flashcard): void {
+  addCard(card: Flashcard): void {
     this.cards.push({ ...card });
-    }
+  }
 
-  updateCard(
-    id: string, 
-    changes: Partial<Omit<Flashcard, 'id'>>
-): void {
-    const update = function(card: Flashcard) {
-        return card.id === id ? { ...card, ...changes } : card
-    }
+  updateCard(id: string, changes: Partial<Omit<Flashcard, 'id'>>): void {
+    const update = function (card: Flashcard) {
+      return card.id === id ? { ...card, ...changes } : card;
+    };
 
     this.cards = this.cards.map(update);
   }

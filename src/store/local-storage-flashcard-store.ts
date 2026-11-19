@@ -31,41 +31,33 @@ export class LocalStorageFlashcardStore extends MemoryFlashcardStore {
     });
 
     if (savedData === null) {
-  this.saveCards();
-}
+      this.saveCards();
+    }
   }
 
   private saveCards(): void {
-  const cards = this.getCards();
+    const cards = this.getCards();
 
-  const json = JSON.stringify(cards);
+    const json = JSON.stringify(cards);
 
-  localStorage.setItem(this.storageKey, json);
-}
+    localStorage.setItem(this.storageKey, json);
+  }
 
-override addCard(card: Flashcard): void {
-  super.addCard(card);
+  override addCard(card: Flashcard): void {
+    super.addCard(card);
 
-  this.saveCards();
+    this.saveCards();
+  }
 
-  
-}
+  override updateCard(id: string, changes: Partial<Flashcard>): void {
+    super.updateCard(id, changes);
 
-override updateCard(
-  id: string,
-  changes: Partial<Flashcard>
-): void {
-  super.updateCard(id, changes);
+    this.saveCards();
+  }
 
-  this.saveCards();
-}
+  override deleteCard(id: string): void {
+    super.deleteCard(id);
 
-override deleteCard(id: string): void {
-  super.deleteCard(id);
-
-  this.saveCards();
-}
-
-
-
+    this.saveCards();
+  }
 }
