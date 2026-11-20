@@ -156,6 +156,30 @@ code {
   }
 }
 
+/* Контейнер навигации */
+.navigation {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+/* Обычное состояние кнопки */
+.nav-button {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  color: #333;
+  cursor: pointer;
+}
+
+/* Активная кнопка навигации */
+.nav-button.active {
+  background-color: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
 #app {
   width: 1126px;
   max-width: 100%;
