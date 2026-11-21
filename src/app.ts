@@ -1,5 +1,6 @@
 import type { Page } from './types/navigation';
 import { renderAboutPage } from './pages/about';
+import { renderVocabularyPage } from './pages/vocabulary';
 
 // Храним идентификатор текущей активной страницы.
 let activePage: Page = 'about';
@@ -73,6 +74,12 @@ function renderPage(): void {
   // Для страницы About Us используем отдельный модуль.
   if (activePage === 'about') {
     content.innerHTML = renderAboutPage();
+    return;
+  }
+
+  // Отображаем страницу Vocabulary с карточками из хранилища.
+  if (activePage === 'vocabulary') {
+    content.innerHTML = renderVocabularyPage();
     return;
   }
 
