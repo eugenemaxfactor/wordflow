@@ -13,6 +13,7 @@
   --color-status-new-text: #4b5563;
   --color-status-learned-background: #dcfce7;
   --color-status-learned-text: #166534;
+  --color-error: #f87171;
   --color-dialog-backdrop: rgba(0, 0, 0, 0.7);
   --dialog-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
 
@@ -370,6 +371,15 @@ p {
 .add-word-form__input:focus {
   border-color: var(--color-accent);
   outline: none;
+}
+
+/* Сообщение об ошибке формы. */
+.add-word-error {
+  min-height: 22px;
+  margin-bottom: var(--space-sm);
+  color: var(--color-error);
+  font-size: var(--font-size-card-status);
+  line-height: 1.5;
 }
 
 /* Группа кнопок формы. */

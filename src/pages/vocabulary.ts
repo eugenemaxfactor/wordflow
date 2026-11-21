@@ -81,6 +81,9 @@ export function renderVocabularyPage(): string {
             required
           />
 
+          
+          <p id="add-word-error" class="add-word-error" role="alert"></p>
+
           <div class="add-word-form__actions">
             <button
               type="button"
@@ -116,8 +119,11 @@ export function setupAddWordModal(refreshPage: () => void): void {
 
   // Находим форму добавления нового слова.
   const form = document.querySelector<HTMLFormElement>('#add-word-form');
+  // Находим элемент для отображения ошибок формы.
+  const errorMessage =
+    document.querySelector<HTMLParagraphElement>('#add-word-error');
 
-  if (!dialog || !openButton || !cancelButton || !form) {
+  if (!dialog || !openButton || !cancelButton || !form || !errorMessage) {
     return;
   }
 
@@ -128,6 +134,7 @@ export function setupAddWordModal(refreshPage: () => void): void {
 
   // Закрываем модальное окно при нажатии Cancel.
   cancelButton.addEventListener('click', () => {
+    errorMessage.textContent = '';
     dialog.close();
   });
 
@@ -150,8 +157,20 @@ export function setupAddWordModal(refreshPage: () => void): void {
     const word = wordInput.value.trim();
     const translation = translationInput.value.trim();
 
-    // Не принимаем пустые значения.
+    // Проверяем, что пользователь ввёл оба значения.
     if (!word || !translation) {
+      errorMessage.textContent = 'Please enter a word and translation.';
+      return;
+    }
+
+    // Проверяем, существует ли английское слово в словаре.
+    const isDuplicate = flashcardStore.getCards().some((card) => {
+      return card.word.toLowerCase() === word.toLowerCase();
+    });
+
+    // Показываем ошибку, если слово уже существует.
+    if (isDuplicate) {
+      errorMessage.textContent = 'This word already exists in your vocabulary.';
       return;
     }
 
@@ -167,6 +186,7 @@ export function setupAddWordModal(refreshPage: () => void): void {
     flashcardStore.addCard(newCard);
     // Очищаем поля формы после успешного сохранения.
     form.reset();
+    errorMessage.textContent = '';
 
     // Закрываем модальное окно.
     dialog.close();
