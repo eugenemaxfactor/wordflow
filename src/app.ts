@@ -1,6 +1,6 @@
 import type { Page } from './types/navigation';
 import { renderAboutPage } from './pages/about';
-import { renderVocabularyPage } from './pages/vocabulary';
+import { renderVocabularyPage, setupAddWordModal } from './pages/vocabulary';
 
 // Храним идентификатор текущей активной страницы.
 let activePage: Page = 'about';
@@ -80,6 +80,10 @@ function renderPage(): void {
   // Отображаем страницу Vocabulary с карточками из хранилища.
   if (activePage === 'vocabulary') {
     content.innerHTML = renderVocabularyPage();
+
+    // Подключаем обработчики после создания HTML.
+    setupAddWordModal(renderPage);
+
     return;
   }
 
