@@ -2,6 +2,12 @@ import { describe, it, expect } from 'vitest';
 import { MemoryFlashcardStore } from './flashcard-store';
 
 describe('MemoryFlashcardStore', () => {
+  it('должен создавать пустое хранилище', () => {
+    const store = new MemoryFlashcardStore();
+
+    expect(store.getCards()).toEqual([]);
+  });
+
   it('должен добавлять новую карточку', () => {
     // Создаём экземпляр хранилища
     const store = new MemoryFlashcardStore();
@@ -80,6 +86,21 @@ describe('MemoryFlashcardStore', () => {
     // Проверяем результат
     expect(cards).toHaveLength(1);
     expect(cards[0]).toEqual(card2);
+  });
+
+  it('не должен изменять хранилище при удалении несуществующей карточки', () => {
+    const store = new MemoryFlashcardStore();
+    const card = {
+      id: '1',
+      word: 'apple',
+      translation: 'яблоко',
+      learned: false,
+    };
+
+    store.addCard(card);
+    store.deleteCard('999');
+
+    expect(store.getCards()).toEqual([card]);
   });
 
   it('не должен позволять изменять внутренний массив', () => {
