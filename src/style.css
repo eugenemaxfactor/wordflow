@@ -180,6 +180,50 @@ code {
   border-color: #2563eb;
 }
 
+/* Основной контейнер страницы About Us. */
+.about {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  text-align: left;
+}
+
+/* Отступ между описанием приложения и командой. */
+.about-team {
+  margin-top: 40px;
+}
+
+/* Карточка отдельного разработчика. */
+.team-member {
+  padding: 24px;
+  margin-top: 16px;
+  border: 1px solid #444;
+  border-radius: 12px;
+}
+
+/* Заголовок карточки разработчика. */
+.team-member h4 {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+/* Ссылка на GitHub-профиль. */
+.team-member a {
+  display: inline-block;
+  margin-top: 8px;
+  color: #646cff;
+}
+
+/* Визуальное выделение ссылки при наведении. */
+.team-member a:hover {
+  text-decoration: underline;
+}
+
+/* Отделяем описание совместной работы от карточек команды. */
+.about-teamwork {
+  margin-top: 40px;
+}
+
 #app {
   width: 1126px;
   max-width: 100%;

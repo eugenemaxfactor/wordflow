@@ -1,4 +1,5 @@
 import type { Page } from './types/navigation';
+import { renderAboutPage } from './pages/about';
 
 // Храним идентификатор текущей активной страницы.
 let activePage: Page = 'about';
@@ -69,7 +70,13 @@ function renderPage(): void {
     return;
   }
 
-  // Обновляем HTML в зависимости от выбранного раздела.
+  // Для страницы About Us используем отдельный модуль.
+  if (activePage === 'about') {
+    content.innerHTML = renderAboutPage();
+    return;
+  }
+
+  // Для остальных страниц пока показываем название раздела.
   content.innerHTML = `<h2>${activePage}</h2>`;
 }
 
