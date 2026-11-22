@@ -1,5 +1,5 @@
 // Импортируем функции для создания тестов и управления их окружением.
-import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { LocalStorageFlashcardStore } from './local-storage-flashcard-store';
 // Импортируем стартовые карточки для проверки первого запуска.
 import { seedWords } from '../data/seed-words';
@@ -15,17 +15,16 @@ describe('LocalStorageFlashcardStore', () => {
     }),
   };
 
-  vi.stubGlobal('localStorage', localStorageMock);
-
-  // Очищаем тестовое хранилище перед каждым тестом,
+  // Создаём чистое тестовое хранилище перед каждым тестом,
   // чтобы результаты тестов не зависели друг от друга.
   beforeEach(() => {
     storage.clear();
     vi.clearAllMocks();
+    vi.stubGlobal('localStorage', localStorageMock);
   });
 
-  // Восстанавливаем глобальные переменные после завершения всех тестов группы.
-  afterAll(() => {
+  // Восстанавливаем глобальные переменные после каждого теста.
+  afterEach(() => {
     vi.unstubAllGlobals();
   });
 
@@ -90,6 +89,15 @@ describe('LocalStorageFlashcardStore', () => {
     const store = new LocalStorageFlashcardStore();
 
     // Проверяем, что вместо повреждённых данных загружены стартовые карточки.
+    expect(store.getCards()).toEqual(seedWords);
+  });
+
+  // Проверяем, что массив объектов без полей Flashcard отклоняется.
+  it('should load seed words when stored cards have invalid structure', () => {
+    storage.set('wordflow-cards', '[{}]');
+
+    const store = new LocalStorageFlashcardStore();
+
     expect(store.getCards()).toEqual(seedWords);
   });
 
