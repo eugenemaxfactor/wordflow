@@ -52,7 +52,10 @@ export class LocalStorageFlashcardStore extends MemoryFlashcardStore {
     this.saveCards();
   }
 
-  override updateCard(id: string, changes: Partial<Flashcard>): void {
+  override updateCard(
+    id: string,
+    changes: Partial<Omit<Flashcard, 'id'>>
+  ): void {
     super.updateCard(id, changes);
 
     this.saveCards();
