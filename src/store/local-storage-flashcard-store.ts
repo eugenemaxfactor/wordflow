@@ -1,6 +1,7 @@
 import type { Flashcard } from '../types/flashcards';
 import { MemoryFlashcardStore } from './flashcard-store';
 import { seedWords } from '../data/seed-words';
+import { isFlashcard } from '../utils/flashcard-type-guard';
 
 export class LocalStorageFlashcardStore extends MemoryFlashcardStore {
   private readonly storageKey = 'wordflow-cards';
@@ -14,9 +15,11 @@ export class LocalStorageFlashcardStore extends MemoryFlashcardStore {
 
     if (savedData !== null) {
       try {
-        cards = JSON.parse(savedData) as Flashcard[];
+        const parsed: unknown = JSON.parse(savedData);
 
-        if (!Array.isArray(cards)) {
+        if (Array.isArray(parsed) && parsed.every(isFlashcard)) {
+          cards = parsed;
+        } else {
           cards = seedWords;
         }
       } catch {
