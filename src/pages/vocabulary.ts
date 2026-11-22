@@ -2,21 +2,6 @@ import { flashcardStore } from '../store';
 import type { Flashcard } from '../types/flashcards';
 import { escapeHtml } from '../utils/escape-html';
 
-// Преобразует специальные HTML-символы в безопасные текстовые представления.
-function escapeHtml(value: string): string {
-  return value.replace(/[&<>"']/g, (char) => {
-    const entities: Record<string, string> = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;',
-    };
-
-    return entities[char];
-  });
-}
-
 // Формирует HTML-разметку страницы Vocabulary.
 export function renderVocabularyPage(): string {
   const cards = flashcardStore.getCards();
