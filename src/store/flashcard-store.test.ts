@@ -150,4 +150,27 @@ it('не должен изменять карточку при изменени�
   expect(storedCard.learned).toBe(false);
 });
 
+  it('should preserve card id when updating', () => {
+    const store = new MemoryFlashcardStore();
+    // Создаём карточку
+    store.addCard({
+      id: '123',
+      word: 'apple',
+      translation: 'яблоко',
+      learned: false,
+    });
+
+    const changes = {
+      id: '999',
+      learned: true,
+    };
+    // Пытаемся изменить её идентификатор
+    store.updateCard('123', changes);
+
+    // Получаем обновлённую карточку
+    const cards = store.getCards();
+    // Проверяем результат
+    expect(cards[0].id).toBe('123');
+    expect(cards[0].learned).toBe(true);
+  });
 });
