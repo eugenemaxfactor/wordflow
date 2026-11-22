@@ -35,7 +35,7 @@ export function renderVocabularyPage(): string {
         <button
           type="button"
           class="vocabulary-card__delete"
-          data-card-id="${card.id}"
+          data-card-id="${escapeHtml(card.id)}"
           aria-label="Delete ${escapeHtml(card.word)}"
           title="Delete word"
         >
