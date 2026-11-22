@@ -4,21 +4,7 @@ import {
   isDuplicateWord,
   hasValidCardFields,
 } from '../utils/flashcard-validation';
-
-// Преобразует специальные HTML-символы в безопасные текстовые представления.
-function escapeHtml(value: string): string {
-  return value.replace(/[&<>"']/g, (char) => {
-    const entities: Record<string, string> = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;',
-    };
-
-    return entities[char];
-  });
-}
+import { escapeHtml } from '../utils/escape-html';
 
 // Формирует HTML-разметку страницы Vocabulary.
 export function renderVocabularyPage(): string {
@@ -39,7 +25,7 @@ export function renderVocabularyPage(): string {
         <button
           type="button"
           class="vocabulary-card__delete"
-          data-card-id="${card.id}"
+          data-card-id="${escapeHtml(card.id)}"
           aria-label="Delete ${escapeHtml(card.word)}"
           title="Delete word"
         >
@@ -159,8 +145,12 @@ export function setupAddWordModal(refreshPage: () => void): void {
 
   // Закрываем модальное окно при нажатии Cancel.
   cancelButton.addEventListener('click', () => {
-    errorMessage.textContent = '';
     dialog.close();
+  });
+
+  // Очищаем сообщение об ошибке при любом закрытии диалога.
+  dialog.addEventListener('close', () => {
+    errorMessage.textContent = '';
   });
 
   // Обрабатываем отправку формы.
