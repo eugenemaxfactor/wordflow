@@ -5,7 +5,7 @@ export interface FlashcardStore {
 
   addCard(card: Flashcard): void;
 
-  updateCard(id: string, changes: Partial<Flashcard>): void;
+  updateCard(id: string, changes: Partial<Omit<Flashcard, 'id'>>): void;
 
   deleteCard(id: string): void;
 }
