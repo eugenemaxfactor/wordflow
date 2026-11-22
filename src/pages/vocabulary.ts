@@ -1,5 +1,6 @@
 import { flashcardStore } from '../store';
 import type { Flashcard } from '../types/flashcards';
+import { escapeHtml } from '../utils/escape-html';
 
 // Преобразует специальные HTML-символы в безопасные текстовые представления.
 function escapeHtml(value: string): string {
