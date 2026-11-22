@@ -134,8 +134,12 @@ export function setupAddWordModal(refreshPage: () => void): void {
 
   // Закрываем модальное окно при нажатии Cancel.
   cancelButton.addEventListener('click', () => {
-    errorMessage.textContent = '';
     dialog.close();
+  });
+
+  // Очищаем сообщение об ошибке при любом закрытии диалога.
+  dialog.addEventListener('close', () => {
+    errorMessage.textContent = '';
   });
 
   // Обрабатываем отправку формы.
