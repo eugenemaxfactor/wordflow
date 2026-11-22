@@ -2,6 +2,21 @@
 export function renderAboutPage(): string {
   return `
     <section class="about">
+      <!-- Краткое описание назначения приложения. -->
+      <section class="about-description" aria-labelledby="about-wordflow-title">
+        <h2 id="about-wordflow-title">About WordFlow</h2>
+
+        <p>
+          WordFlow is a vocabulary learning app designed to help you improve
+          your English using flashcards.
+        </p>
+
+        <p>
+          Build your personal vocabulary collection, practice new words, and
+          track your learning progress.
+        </p>
+      </section>
+
       <!-- Информация о разработчиках и распределении обязанностей. -->
 <div class="about-team">
   <h3>Our Team</h3>

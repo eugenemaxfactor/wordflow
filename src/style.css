@@ -188,6 +188,19 @@ code {
   text-align: left;
 }
 
+/* Описание назначения приложения. */
+.about-description {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background-color: var(--social-bg);
+}
+
+/* Отступ между абзацами описания. */
+.about-description p + p {
+  margin-top: 12px;
+}
+
 /* Отступ между описанием приложения и командой. */
 .about-team {
   margin-top: 40px;
