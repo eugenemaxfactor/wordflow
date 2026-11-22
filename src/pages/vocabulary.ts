@@ -1,5 +1,6 @@
 import { flashcardStore } from '../store';
 import type { Flashcard } from '../types/flashcards';
+import { escapeHtml } from '../utils/escape-html';
 
 // Формирует HTML-разметку страницы Vocabulary.
 export function renderVocabularyPage(): string {
@@ -11,8 +12,8 @@ export function renderVocabularyPage(): string {
 
     return `
       <article class="vocabulary-card">
-        <h3 class="vocabulary-card__word">${card.word}</h3>
-        <p class="vocabulary-card__translation">${card.translation}</p>
+        <h3 class="vocabulary-card__word">${escapeHtml(card.word)}</h3>
+        <p class="vocabulary-card__translation">${escapeHtml(card.translation)}</p>
         <span class="vocabulary-card__status vocabulary-card__status--${status}">
           ${status}
         </span>
