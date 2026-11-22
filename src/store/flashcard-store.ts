@@ -15,13 +15,14 @@ export class MemoryFlashcardStore implements FlashcardStore {
     }
 
   updateCard(
-    id: string, 
+    id: string,
     changes: Partial<Omit<Flashcard, 'id'>>
-): void {
+  ): void {
     const update = function(card: Flashcard) {
-        return card.id === id ? { ...card, ...changes } : card
-    }
-
+      return card.id === id
+        ? { ...card, ...changes, id: card.id }
+        : card;
+    };
     this.cards = this.cards.map(update);
   }
 
