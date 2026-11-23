@@ -1,5 +1,9 @@
 import { flashcardStore } from '../store';
 import type { Flashcard } from '../types/flashcards';
+import {
+  isDuplicateWord,
+  hasValidCardFields,
+} from '../utils/flashcard-validation';
 import { escapeHtml } from '../utils/escape-html';
 
 // Формирует HTML-разметку страницы Vocabulary.
@@ -169,15 +173,12 @@ export function setupAddWordModal(refreshPage: () => void): void {
     const translation = translationInput.value.trim();
 
     // Проверяем, что пользователь ввёл оба значения.
-    if (!word || !translation) {
+    if (!hasValidCardFields(word, translation)) {
       errorMessage.textContent = 'Please enter a word and translation.';
       return;
     }
 
-    // Проверяем, существует ли английское слово в словаре.
-    const isDuplicate = flashcardStore.getCards().some((card) => {
-      return card.word.toLowerCase() === word.toLowerCase();
-    });
+    const isDuplicate = isDuplicateWord(flashcardStore.getCards(), word);
 
     // Показываем ошибку, если слово уже существует.
     if (isDuplicate) {
