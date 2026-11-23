@@ -1,0 +1,554 @@
+:root {
+  --color-bg: #0b0d12;
+  --color-surface: #131722;
+  --color-surface-hover: #1a2030;
+  --color-text: #aeb6c5;
+  --color-heading: #f5f7fb;
+  --color-border: #2a3140;
+  --color-accent: #7c5cff;
+  --color-accent-hover: #9278ff;
+  --color-on-accent: #ffffff;
+  --color-border-hover: #3d485e;
+  --color-status-new-background: #e5e7eb;
+  --color-status-new-text: #4b5563;
+  --color-status-learned-background: #dcfce7;
+  --color-status-learned-text: #166534;
+  --color-error: #f87171;
+  --color-error-background: rgba(248, 113, 113, 0.12);
+  --color-dialog-backdrop: rgba(0, 0, 0, 0.7);
+  --dialog-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+
+  --font-sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-size-body: 16px;
+  --font-size-title: 48px;
+  --font-size-heading: 32px;
+  --font-size-subheading: 20px;
+  --font-size-card-word: 24px;
+  --font-size-card-status: 14px;
+  --line-height-body: 1.55;
+
+  --content-width: 1126px;
+  --about-width: 800px;
+  --page-padding: 32px;
+  --section-padding: 40px;
+  --card-padding: 24px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --transition-fast: 160ms ease;
+
+  color-scheme: dark;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+}
+
+button {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--color-heading);
+  line-height: 1.2;
+}
+
+h1 {
+  margin: 0;
+  font-size: var(--font-size-title);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+h2,
+h3 {
+  margin: 0;
+  font-size: var(--font-size-heading);
+  font-weight: 600;
+}
+
+h4 {
+  margin: 0 0 var(--space-sm);
+  font-size: var(--font-size-subheading);
+}
+
+p {
+  margin: 0;
+}
+
+#app {
+  width: 100%;
+  max-width: var(--content-width);
+  min-height: 100svh;
+  margin: 0 auto;
+  border-inline: 1px solid var(--color-border);
+}
+
+.app,
+.header,
+#page-content {
+  width: 100%;
+  min-width: 0;
+}
+
+.header {
+  padding: var(--section-padding) var(--page-padding) var(--space-lg);
+  text-align: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.navigation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.nav-button {
+  max-width: 100%;
+  padding: 10px var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.nav-button:hover {
+  color: var(--color-heading);
+  background: var(--color-surface-hover);
+  border-color: var(--color-accent);
+}
+
+.nav-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.nav-button.active {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+#page-content > h2 {
+  padding: var(--section-padding) var(--page-padding);
+  text-align: center;
+}
+
+.about {
+  width: 100%;
+  max-width: var(--about-width);
+  margin: 0 auto;
+  padding: var(--section-padding) var(--page-padding);
+  text-align: left;
+}
+
+/* Описание назначения приложения. */
+.about-description {
+  padding: var(--card-padding);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+/* Отступ между абзацами описания. */
+.about-description p + p {
+  margin-top: var(--space-md);
+}
+
+/* Отступ между описанием приложения и командой. */
+.about-team {
+  margin-top: var(--space-md);
+}
+
+/* Общий вид карточек разработчиков и слов. */
+.team-member,
+.vocabulary-card {
+  padding-top: var(--card-padding);
+  padding-right: var(--card-padding);
+  padding-bottom: var(--card-padding);
+  padding-left: var(--card-padding);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  transition-property: background-color, border-color;
+  transition-duration: 160ms;
+  transition-timing-function: ease;
+}
+
+/* Лёгкое выделение карточек при наведении. */
+.team-member:hover,
+.vocabulary-card:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.team-member {
+  margin-top: var(--space-md);
+  overflow-wrap: break-word;
+}
+
+.team-member a {
+  display: inline-block;
+  max-width: 100%;
+  margin-top: var(--space-sm);
+  color: var(--color-accent-hover);
+  overflow-wrap: anywhere;
+}
+
+.team-member a:hover {
+  color: var(--color-heading);
+}
+
+.team-member a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.about-teamwork {
+  margin-top: var(--space-xl);
+}
+
+/* Основной контейнер страницы Vocabulary. */
+.vocabulary {
+  padding-top: 32px;
+  padding-right: 32px;
+  padding-bottom: 32px;
+  padding-left: 32px;
+}
+
+/* Сетка с карточками слов. */
+.vocabulary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 16px;
+  row-gap: 16px;
+  margin-top: 24px;
+}
+
+/* Карточка одного слова. */
+.vocabulary-card {
+  min-width: 0;
+  position: relative;
+  padding-right: 56px;
+}
+
+/* Английское слово. */
+.vocabulary-card__word {
+  color: var(--color-heading);
+  font-size: var(--font-size-card-word);
+  font-weight: 700;
+}
+
+/* Перевод слова. */
+.vocabulary-card__translation {
+  color: var(--color-text);
+  margin-top: 8px;
+}
+
+/* Общий вид бейджа статуса. */
+.vocabulary-card__status {
+  display: inline-block;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-card-status);
+  margin-top: 16px;
+  padding-top: 4px;
+  padding-right: 8px;
+  padding-bottom: 4px;
+  padding-left: 8px;
+}
+
+/* Серый статус для нового слова. */
+.vocabulary-card__status--new {
+  background-color: var(--color-status-new-background);
+  color: var(--color-status-new-text);
+}
+
+/* Зелёный статус для изученного слова. */
+.vocabulary-card__status--learned {
+  background-color: var(--color-status-learned-background);
+  color: var(--color-status-learned-text);
+}
+
+/* Кнопка удаления карточки. */
+.vocabulary-card__delete {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding-top: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-heading);
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.vocabulary-card__delete:hover {
+  color: var(--color-error);
+  background-color: var(--color-error-background);
+}
+
+.vocabulary-card__delete:focus-visible {
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: var(--color-error);
+  outline-offset: 2px;
+}
+
+.vocabulary-card__delete-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Кнопка открытия формы добавления слова. */
+.vocabulary__add-button {
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-md);
+  padding-top: 10px;
+  padding-right: 16px;
+  padding-bottom: 10px;
+  padding-left: 16px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-accent);
+  border-radius: var(--radius-sm);
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.vocabulary__add-button:hover {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.vocabulary__add-button:focus-visible {
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: var(--color-accent-hover);
+  outline-offset: 2px;
+}
+
+/* Модальное окно добавления слова. */
+.add-word-dialog {
+  width: 90%;
+  max-width: 480px;
+  max-height: 90vh;
+  margin: auto;
+  padding-top: 24px;
+  padding-right: 24px;
+  padding-bottom: 24px;
+  padding-left: 24px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  box-shadow: var(--dialog-shadow);
+  overflow-y: auto;
+}
+
+.add-word-dialog::backdrop {
+  background-color: var(--color-dialog-backdrop);
+}
+
+.add-word-dialog__title {
+  font-size: var(--font-size-heading);
+  margin-bottom: var(--space-lg);
+}
+
+/* Вертикальное расположение полей формы. */
+.add-word-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-word-form__label {
+  margin-bottom: var(--space-sm);
+  color: var(--color-heading);
+  font-weight: 600;
+}
+
+.add-word-form__input {
+  width: 100%;
+  margin-bottom: var(--space-md);
+  padding-top: 10px;
+  padding-right: 12px;
+  padding-bottom: 10px;
+  padding-left: 12px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-heading);
+  background-color: var(--color-bg);
+  font: inherit;
+}
+
+.add-word-form__input:hover {
+  border-color: var(--color-border-hover);
+}
+
+.add-word-form__input:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+/* Сообщение об ошибке формы. */
+.add-word-error {
+  min-height: 22px;
+  margin-bottom: var(--space-sm);
+  color: var(--color-error);
+  font-size: var(--font-size-card-status);
+  line-height: 1.5;
+}
+
+/* Группа кнопок формы. */
+.add-word-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  column-gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.add-word-form__button {
+  padding-top: 10px;
+  padding-right: 16px;
+  padding-bottom: 10px;
+  padding-left: 16px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.add-word-form__button--primary {
+  border-color: var(--color-accent);
+  color: var(--color-on-accent);
+  background-color: var(--color-accent);
+}
+
+.add-word-form__button--primary:hover {
+  border-color: var(--color-accent-hover);
+  background-color: var(--color-accent-hover);
+}
+
+.add-word-form__button--secondary {
+  border-color: var(--color-border);
+  color: var(--color-text);
+  background-color: var(--color-surface-hover);
+}
+
+.add-word-form__button--secondary:hover {
+  border-color: var(--color-border-hover);
+  color: var(--color-heading);
+}
+
+.add-word-form__button:focus-visible {
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: var(--color-accent-hover);
+  outline-offset: 2px;
+}
+
+/* Две колонки на планшетах. */
+@media (max-width: 768px) {
+  :root {
+    --font-size-title: 40px;
+    --font-size-heading: 28px;
+    --page-padding: 24px;
+    --section-padding: 32px;
+    --card-padding: 20px;
+  }
+
+  .vocabulary {
+    padding-top: 24px;
+    padding-right: 24px;
+    padding-bottom: 24px;
+    padding-left: 24px;
+  }
+
+  .vocabulary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Одна колонка на телефонах. */
+@media (max-width: 480px) {
+  :root {
+    --font-size-title: 36px;
+    --font-size-heading: 24px;
+    --page-padding: 16px;
+    --section-padding: 24px;
+    --card-padding: 16px;
+  }
+
+  .vocabulary {
+    padding-top: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    padding-left: 16px;
+  }
+
+  .vocabulary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .add-word-dialog {
+    width: 94%;
+    padding-top: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    padding-left: 16px;
+  }
+
+  .add-word-form__actions {
+    flex-direction: column;
+    row-gap: var(--space-sm);
+  }
+
+  .add-word-form__button {
+    width: 100%;
+  }
+}
