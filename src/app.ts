@@ -1,6 +1,10 @@
 import type { Page } from './types/navigation';
 import { renderAboutPage } from './pages/about';
-import { renderVocabularyPage, setupAddWordModal } from './pages/vocabulary';
+import {
+  renderVocabularyPage,
+  setupAddWordModal,
+  setupDeleteCards,
+} from './pages/vocabulary';
 
 // Храним идентификатор текущей активной страницы.
 let activePage: Page = 'about';
@@ -83,6 +87,8 @@ function renderPage(): void {
 
     // Подключаем обработчики после создания HTML.
     setupAddWordModal(renderPage);
+
+    setupDeleteCards(renderPage);
 
     return;
   }
