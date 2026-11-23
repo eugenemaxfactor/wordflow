@@ -2,9 +2,13 @@ import { describe, it, expect } from 'vitest';
 import { MemoryFlashcardStore } from './flashcard-store';
 
 describe('MemoryFlashcardStore', () => {
+  it('должен создавать пустое хранилище', () => {
+    const store = new MemoryFlashcardStore();
+
+    expect(store.getCards()).toEqual([]);
+  });
 
   it('должен добавлять новую карточку', () => {
-
     // Создаём экземпляр хранилища
     const store = new MemoryFlashcardStore();
 
@@ -13,7 +17,7 @@ describe('MemoryFlashcardStore', () => {
       id: '1',
       word: 'apple',
       translation: 'яблоко',
-      learned: false
+      learned: false,
     };
 
     // Добавляем карточку
@@ -25,130 +29,144 @@ describe('MemoryFlashcardStore', () => {
     // Проверяем результат
     expect(cards).toHaveLength(1);
     expect(cards[0]).toEqual(card);
-
   });
 
   it('должен обновлять существующую карточку', () => {
-  const store = new MemoryFlashcardStore();
+    const store = new MemoryFlashcardStore();
 
-  const card = {
-    id: '1',
-    word: 'apple',
-    translation: 'яблоко',
-    learned: false
-  };
+    const card = {
+      id: '1',
+      word: 'apple',
+      translation: 'яблоко',
+      learned: false,
+    };
 
-  // Добавляем карточку
-  store.addCard(card);
+    // Добавляем карточку
+    store.addCard(card);
 
-  // Обновляем карточку
-  store.updateCard('1', { learned: true });
+    // Обновляем карточку
+    store.updateCard('1', { learned: true });
 
-  // Получаем обновлённую карточку
-  const updatedCard = store.getCards()[0];
+    // Получаем обновлённую карточку
+    const updatedCard = store.getCards()[0];
 
-  // Проверяем результат
-  expect(updatedCard.learned).toBe(true);
-  expect(updatedCard.word).toBe('apple');
-  expect(updatedCard.translation).toBe('яблоко');
-});
+    // Проверяем результат
+    expect(updatedCard.learned).toBe(true);
+    expect(updatedCard.word).toBe('apple');
+    expect(updatedCard.translation).toBe('яблоко');
+  });
 
-it('должен удалять карточку по id', () => {
-  const store = new MemoryFlashcardStore();
+  it('должен удалять карточку по id', () => {
+    const store = new MemoryFlashcardStore();
 
-  const card1 = {
-    id: '1',
-    word: 'apple',
-    translation: 'яблоко',
-    learned: false
-  };
+    const card1 = {
+      id: '1',
+      word: 'apple',
+      translation: 'яблоко',
+      learned: false,
+    };
 
-  const card2 = {
-    id: '2',
-    word: 'house',
-    translation: 'дом',
-    learned: false
-  };
+    const card2 = {
+      id: '2',
+      word: 'house',
+      translation: 'дом',
+      learned: false,
+    };
 
-  // Добавляем две карточки
-  store.addCard(card1);
-  store.addCard(card2);
+    // Добавляем две карточки
+    store.addCard(card1);
+    store.addCard(card2);
 
-  // Удаляем первую карточку
-  store.deleteCard('1');
+    // Удаляем первую карточку
+    store.deleteCard('1');
 
-  // Получаем оставшиеся карточки
-  const cards = store.getCards();
+    // Получаем оставшиеся карточки
+    const cards = store.getCards();
 
-  // Проверяем результат
-  expect(cards).toHaveLength(1);
-  expect(cards[0]).toEqual(card2);
-});
+    // Проверяем результат
+    expect(cards).toHaveLength(1);
+    expect(cards[0]).toEqual(card2);
+  });
 
-it('не должен позволять изменять внутренний массив', () => {
-  const store = new MemoryFlashcardStore();
+  it('не должен изменять хранилище при удалении несуществующей карточки', () => {
+    const store = new MemoryFlashcardStore();
+    const card = {
+      id: '1',
+      word: 'apple',
+      translation: 'яблоко',
+      learned: false,
+    };
 
-  const card = {
-    id: '1',
-    word: 'apple',
-    translation: 'яблоко',
-    learned: false
-  };
+    store.addCard(card);
+    store.deleteCard('999');
 
-  store.addCard(card);
+    expect(store.getCards()).toEqual([card]);
+  });
 
-  // Получаем массив карточек
-  const cards = store.getCards();
+  it('не должен позволять изменять внутренний массив', () => {
+    const store = new MemoryFlashcardStore();
 
-  // Изменяем полученный массив
-  cards.pop();
+    const card = {
+      id: '1',
+      word: 'apple',
+      translation: 'яблоко',
+      learned: false,
+    };
 
-  // Проверяем внутреннее хранилище
-  expect(store.getCards()).toHaveLength(1);
-});
+    store.addCard(card);
 
-it('не должен позволять изменять карточки напрямую', () => {
-  const store = new MemoryFlashcardStore();
+    // Получаем массив карточек
+    const cards = store.getCards();
 
-  const card = {
-    id: '1',
-    word: 'apple',
-    translation: 'яблоко',
-    learned: false
-  };
+    // Изменяем полученный массив
+    cards.pop();
 
-  store.addCard(card);
+    // Проверяем внутреннее хранилище
+    expect(store.getCards()).toHaveLength(1);
+  });
 
-  // Получаем карточки
-  const cards = store.getCards();
+  it('не должен позволять изменять карточки напрямую', () => {
+    const store = new MemoryFlashcardStore();
 
-  // Изменяем объект в полученном массиве
-  cards[0].learned = true;
+    const card = {
+      id: '1',
+      word: 'apple',
+      translation: 'яблоко',
+      learned: false,
+    };
 
-  // Проверяем, что оригинальная карточка не изменилась
-  expect(store.getCards()[0].learned).toBe(false);
-});
+    store.addCard(card);
 
-it('не должен изменять карточку при изменении исходного объекта', () => {
-  const store = new MemoryFlashcardStore();
+    // Получаем карточки
+    const cards = store.getCards();
 
-  const card = {
-    id: '1',
-    word: 'apple',
-    translation: 'яблоко',
-    learned: false
-  };
+    // Изменяем объект в полученном массиве
+    cards[0].learned = true;
 
-  store.addCard(card);
+    // Проверяем, что оригинальная карточка не изменилась
+    expect(store.getCards()[0].learned).toBe(false);
+  });
 
-  // Изменяем исходный объект
-  card.learned = true;
+  it('не должен изменять карточку при изменении исходного объекта', () => {
+    const store = new MemoryFlashcardStore();
 
-  // Проверяем карточку внутри хранилища
-  const storedCard = store.getCards()[0];
+    const card = {
+      id: '1',
+      word: 'apple',
+      translation: 'яблоко',
+      learned: false,
+    };
 
-  expect(storedCard.learned).toBe(false);
-});
+    store.addCard(card);
+
+    // Изменяем исходный объект
+    card.learned = true;
+
+    // Проверяем карточку внутри хранилища
+    const storedCard = store.getCards()[0];
+
+    expect(storedCard.learned).toBe(false);
+  });
 
   it('should preserve card id when updating', () => {
     const store = new MemoryFlashcardStore();
