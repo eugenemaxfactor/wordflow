@@ -36,7 +36,7 @@ export const seedWords: Flashcard[] = [
     example: 'Knowledge is important for success.',
     learned: false,
   },
-    {
+  {
     id: '6',
     word: 'experience',
     translation: 'опыт',
