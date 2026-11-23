@@ -1,5 +1,9 @@
 import { flashcardStore } from '../store';
 import type { Flashcard } from '../types/flashcards';
+import {
+  isDuplicateWord,
+  hasValidCardFields,
+} from '../utils/flashcard-validation';
 import { escapeHtml } from '../utils/escape-html';
 
 // Формирует HTML-разметку страницы Vocabulary.
@@ -17,6 +21,27 @@ export function renderVocabularyPage(): string {
         <span class="vocabulary-card__status vocabulary-card__status--${status}">
           ${status}
         </span>
+
+        <button
+          type="button"
+          class="vocabulary-card__delete"
+          data-card-id="${escapeHtml(card.id)}"
+          aria-label="Delete ${escapeHtml(card.word)}"
+          title="Delete word"
+        >
+          <svg
+            class="vocabulary-card__delete-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M4 7h16" />
+            <path d="M9 7V4h6v3" />
+            <path d="M6 7l1 13h10l1-13" />
+            <path d="M10 11v5" />
+            <path d="M14 11v5" />
+          </svg>
+        </button>
       </article>
     `;
   }
@@ -67,6 +92,9 @@ export function renderVocabularyPage(): string {
             required
           />
 
+          
+          <p id="add-word-error" class="add-word-error" role="alert"></p>
+
           <div class="add-word-form__actions">
             <button
               type="button"
@@ -102,8 +130,11 @@ export function setupAddWordModal(refreshPage: () => void): void {
 
   // Находим форму добавления нового слова.
   const form = document.querySelector<HTMLFormElement>('#add-word-form');
+  // Находим элемент для отображения ошибок формы.
+  const errorMessage =
+    document.querySelector<HTMLParagraphElement>('#add-word-error');
 
-  if (!dialog || !openButton || !cancelButton || !form) {
+  if (!dialog || !openButton || !cancelButton || !form || !errorMessage) {
     return;
   }
 
@@ -115,6 +146,11 @@ export function setupAddWordModal(refreshPage: () => void): void {
   // Закрываем модальное окно при нажатии Cancel.
   cancelButton.addEventListener('click', () => {
     dialog.close();
+  });
+
+  // Очищаем сообщение об ошибке при любом закрытии диалога.
+  dialog.addEventListener('close', () => {
+    errorMessage.textContent = '';
   });
 
   // Обрабатываем отправку формы.
@@ -136,8 +172,17 @@ export function setupAddWordModal(refreshPage: () => void): void {
     const word = wordInput.value.trim();
     const translation = translationInput.value.trim();
 
-    // Не принимаем пустые значения.
-    if (!word || !translation) {
+    // Проверяем, что пользователь ввёл оба значения.
+    if (!hasValidCardFields(word, translation)) {
+      errorMessage.textContent = 'Please enter a word and translation.';
+      return;
+    }
+
+    const isDuplicate = isDuplicateWord(flashcardStore.getCards(), word);
+
+    // Показываем ошибку, если слово уже существует.
+    if (isDuplicate) {
+      errorMessage.textContent = 'This word already exists in your vocabulary.';
       return;
     }
 
@@ -153,11 +198,54 @@ export function setupAddWordModal(refreshPage: () => void): void {
     flashcardStore.addCard(newCard);
     // Очищаем поля формы после успешного сохранения.
     form.reset();
+    errorMessage.textContent = '';
 
     // Закрываем модальное окно.
     dialog.close();
 
     // Обновляем страницу, чтобы показать новую карточку.
+    refreshPage();
+  });
+}
+
+// Настраивает удаление карточек через один обработчик событий.
+export function setupDeleteCards(refreshPage: () => void): void {
+  // Находим контейнер страницы Vocabulary.
+  const vocabulary = document.querySelector<HTMLElement>('.vocabulary');
+
+  if (!vocabulary) {
+    return;
+  }
+
+  // Обрабатываем клики внутри Vocabulary.
+  vocabulary.addEventListener('click', (event) => {
+    // Определяем HTML-элемент, по которому нажал пользователь.
+    const target = event.target;
+
+    if (!(target instanceof Element)) {
+      return;
+    }
+
+    // Проверяем, нажал ли пользователь кнопку Delete.
+    const deleteButton = target.closest<HTMLButtonElement>(
+      '.vocabulary-card__delete'
+    );
+
+    if (!deleteButton) {
+      return;
+    }
+
+    // Получаем ID карточки из data-card-id.
+    const cardId = deleteButton.dataset.cardId;
+
+    if (!cardId) {
+      return;
+    }
+
+    // Удаляем карточку через общее хранилище.
+    flashcardStore.deleteCard(cardId);
+
+    // Обновляем страницу без перезагрузки браузера.
     refreshPage();
   });
 }

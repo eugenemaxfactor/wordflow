@@ -13,6 +13,8 @@
   --color-status-new-text: #4b5563;
   --color-status-learned-background: #dcfce7;
   --color-status-learned-text: #166534;
+  --color-error: #f87171;
+  --color-error-background: rgba(248, 113, 113, 0.12);
   --color-dialog-backdrop: rgba(0, 0, 0, 0.7);
   --dialog-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
 
@@ -252,6 +254,8 @@ p {
 /* Карточка одного слова. */
 .vocabulary-card {
   min-width: 0;
+  position: relative;
+  padding-right: 56px;
 }
 
 /* Английское слово. */
@@ -289,6 +293,51 @@ p {
 .vocabulary-card__status--learned {
   background-color: var(--color-status-learned-background);
   color: var(--color-status-learned-text);
+}
+
+/* Кнопка удаления карточки. */
+.vocabulary-card__delete {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding-top: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-heading);
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.vocabulary-card__delete:hover {
+  color: var(--color-error);
+  background-color: var(--color-error-background);
+}
+
+.vocabulary-card__delete:focus-visible {
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: var(--color-error);
+  outline-offset: 2px;
+}
+
+.vocabulary-card__delete-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* Кнопка открытия формы добавления слова. */
@@ -384,6 +433,15 @@ p {
 .add-word-form__input:focus {
   border-color: var(--color-accent);
   outline: none;
+}
+
+/* Сообщение об ошибке формы. */
+.add-word-error {
+  min-height: 22px;
+  margin-bottom: var(--space-sm);
+  color: var(--color-error);
+  font-size: var(--font-size-card-status);
+  line-height: 1.5;
 }
 
 /* Группа кнопок формы. */
