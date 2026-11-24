@@ -157,6 +157,27 @@ p {
   text-align: center;
 }
 
+.learn {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-md);
+  padding: var(--section-padding) var(--page-padding);
+  text-align: center;
+}
+
+.learn-card {
+  width: min(100%, 480px);
+  padding: var(--card-padding);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow-wrap: anywhere;
+}
+
+.learn-card__word {
+  font-size: var(--font-size-card-word);
+}
+
 .about {
   width: 100%;
   max-width: var(--about-width);
