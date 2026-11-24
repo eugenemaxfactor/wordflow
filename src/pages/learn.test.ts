@@ -13,7 +13,12 @@ describe('renderLearnPage', () => {
     const html = renderLearnPage(card, true);
 
     expect(html).toContain('<h3 class="learn-card__word">apple</h3>');
-    expect(html).toContain('<p class="learn-card__answer" hidden>яблоко</p>');
+    expect(html).toContain(
+      '<p id="learn-answer" class="learn-card__answer" hidden>яблоко</p>'
+    );
+    expect(html).toContain('Show Answer');
+    expect(html).toContain('aria-controls="learn-answer"');
+    expect(html).toContain('aria-expanded="false"');
     expect(html).toContain('Next Card');
   });
 
@@ -26,5 +31,6 @@ describe('renderLearnPage', () => {
 
     expect(html).toContain('No new cards to learn.');
     expect(html).not.toContain('<article');
+    expect(html).not.toContain('Show Answer');
   });
 });
