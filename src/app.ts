@@ -1,5 +1,7 @@
 import type { Page } from './types/navigation';
 import { renderAboutPage } from './pages/about';
+import { mountLearnPage } from './pages/learn';
+import { flashcardStore } from './store';
 import {
   renderVocabularyPage,
   setupAddWordModal,
@@ -93,7 +95,12 @@ function renderPage(): void {
     return;
   }
 
-  // Для остальных страниц пока показываем название раздела.
+  if (activePage === 'learn') {
+    mountLearnPage(content, flashcardStore.getCards());
+    return;
+  }
+
+  // Раздел статистики пока не реализован.
   content.innerHTML = `<h2>${activePage}</h2>`;
 }
 
