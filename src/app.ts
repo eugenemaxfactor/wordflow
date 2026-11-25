@@ -96,7 +96,7 @@ function renderPage(): void {
   }
 
   if (activePage === 'learn') {
-    mountLearnPage(content, flashcardStore.getCards());
+    mountLearnPage(content, flashcardStore);
     return;
   }
 

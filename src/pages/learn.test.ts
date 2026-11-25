@@ -10,7 +10,7 @@ const card = {
 
 describe('renderLearnPage', () => {
   it('shows the current word and hides its translation', () => {
-    const html = renderLearnPage(card, true);
+    const html = renderLearnPage(card);
 
     expect(html).toContain('<h3 class="learn-card__word">apple</h3>');
     expect(html).toContain(
@@ -19,11 +19,14 @@ describe('renderLearnPage', () => {
     expect(html).toContain('Show Answer');
     expect(html).toContain('aria-controls="learn-answer"');
     expect(html).toContain('aria-expanded="false"');
-    expect(html).toContain('Next Card');
+    expect(html).toContain('data-learn-i-know hidden disabled>I Know');
   });
 
-  it('does not offer a next card when the current card is the last one', () => {
-    expect(renderLearnPage(card, false)).not.toContain('Next Card');
+  it('shows the end of the session after the last card is marked learned', () => {
+    const html = renderLearnPage(undefined, true);
+
+    expect(html).toContain('Session complete.');
+    expect(html).not.toContain('I Know');
   });
 
   it('shows an empty state when no cards are available', () => {

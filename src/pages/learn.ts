@@ -1,10 +1,11 @@
+import type { FlashcardStore } from '../types/flashcard-store';
 import type { Flashcard } from '../types/flashcards';
 import { escapeHtml } from '../utils/escape-html';
 import { prepareLearningQueue } from '../utils/prepare-learning-queue';
 
 export function renderLearnPage(
   card: Flashcard | undefined,
-  hasNext: boolean
+  isComplete = false
 ): string {
   return `
     <section class="learn" aria-labelledby="learn-title">
@@ -21,44 +22,57 @@ export function renderLearnPage(
               aria-controls="learn-answer"
               aria-expanded="false"
               data-learn-show-answer
-            >Show Answer</button>`
-          : '<p>No new cards to learn.</p>'
+            >Show Answer</button>
+            <button type="button" class="nav-button" data-learn-i-know hidden disabled>I Know</button>`
+          : isComplete
+            ? '<p>Session complete.</p>'
+            : '<p>No new cards to learn.</p>'
       }
-      ${hasNext ? '<button type="button" class="nav-button" data-learn-next>Next Card</button>' : ''}
     </section>
   `;
 }
 
 export function mountLearnPage(
   container: HTMLElement,
-  cards: Flashcard[]
+  store: FlashcardStore
 ): void {
-  const queue = prepareLearningQueue(cards);
+  const queue = prepareLearningQueue(store.getCards());
   let currentIndex = 0;
 
   function render(): void {
-    const hasNext = currentIndex + 1 < queue.length;
+    const card = queue[currentIndex];
     // Рендер новой карточки всегда начинается со скрытого перевода.
-    container.innerHTML = renderLearnPage(queue[currentIndex], hasNext);
+    container.innerHTML = renderLearnPage(card, currentIndex > 0);
 
     const answer = container.querySelector<HTMLElement>('#learn-answer');
     const showAnswer = container.querySelector<HTMLButtonElement>(
       '[data-learn-show-answer]'
     );
 
-    if (answer && showAnswer) {
-      showAnswer.addEventListener('click', () => {
-        answer.hidden = false;
-        showAnswer.setAttribute('aria-expanded', 'true');
-      });
+    const iKnow = container.querySelector<HTMLButtonElement>(
+      '[data-learn-i-know]'
+    );
+
+    if (!card || !answer || !showAnswer || !iKnow) {
+      return;
     }
 
-    container
-      .querySelector('[data-learn-next]')
-      ?.addEventListener('click', () => {
-        currentIndex += 1;
-        render();
-      });
+    showAnswer.addEventListener('click', () => {
+      answer.hidden = false;
+      showAnswer.setAttribute('aria-expanded', 'true');
+      iKnow.hidden = false;
+      iKnow.disabled = false;
+    });
+
+    iKnow.addEventListener('click', () => {
+      if (answer.hidden) {
+        return;
+      }
+
+      store.updateCard(card.id, { learned: true });
+      currentIndex += 1;
+      render();
+    });
   }
 
   render();
