@@ -20,6 +20,7 @@ describe('renderLearnPage', () => {
     expect(html).toContain('aria-controls="learn-answer"');
     expect(html).toContain('aria-expanded="false"');
     expect(html).toContain('data-learn-i-know hidden disabled>I Know');
+    expect(html).toContain('data-learn-again hidden disabled>Again');
   });
 
   it('shows the end of the session after the last card is marked learned', () => {
