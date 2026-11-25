@@ -96,7 +96,14 @@ function renderPage(): void {
   }
 
   if (activePage === 'learn') {
-    mountLearnPage(content, flashcardStore);
+    mountLearnPage(content, flashcardStore, () => {
+      navigateTo('vocabulary');
+      document
+        .querySelector<HTMLButtonElement>(
+          '.navigation [data-page="vocabulary"]'
+        )
+        ?.focus();
+    });
     return;
   }
 
@@ -107,7 +114,9 @@ function renderPage(): void {
 // Выделяем кнопку текущей активной страницы.
 function updateActiveButton(): void {
   // Находим все кнопки навигации.
-  const buttons = document.querySelectorAll<HTMLButtonElement>('.nav-button');
+  const buttons = document.querySelectorAll<HTMLButtonElement>(
+    '.navigation .nav-button'
+  );
 
   buttons.forEach((button) => {
     // Проверяем, соответствует ли кнопка активной странице.
@@ -116,6 +125,12 @@ function updateActiveButton(): void {
     // Добавляем или удаляем CSS-класс active.
     button.classList.toggle('active', isActive);
   });
+}
+
+function navigateTo(page: Page): void {
+  activePage = page;
+  renderPage();
+  updateActiveButton();
 }
 
 // Подключаем обработчик кликов к контейнеру навигации.
@@ -141,17 +156,7 @@ export function setupNavigation(): void {
       return;
     }
 
-    // Получаем идентификатор страницы из HTML-атрибута.
-    const page = button.dataset.page;
-
-    // Проверяем страницу. Если она неизвестна — выбираем About Us.
-    activePage = resolvePage(page);
-
-    // Обновляем содержимое страницы.
-    renderPage();
-
-    // Обновляем выделение активной кнопки.
-    updateActiveButton();
+    navigateTo(resolvePage(button.dataset.page));
   });
 
   // Отображаем начальную страницу при запуске приложения.
