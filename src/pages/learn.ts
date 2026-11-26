@@ -23,7 +23,8 @@ export function renderLearnPage(
               aria-expanded="false"
               data-learn-show-answer
             >Show Answer</button>
-            <button type="button" class="nav-button" data-learn-i-know hidden disabled>I Know</button>`
+            <button type="button" class="nav-button" data-learn-i-know hidden disabled>I Know</button>
+            <button type="button" class="nav-button" data-learn-again hidden disabled>Again</button>`
           : isComplete
             ? '<p>Session complete.</p>'
             : '<p>No new cards to learn.</p>'
@@ -53,7 +54,10 @@ export function mountLearnPage(
       '[data-learn-i-know]'
     );
 
-    if (!card || !answer || !showAnswer || !iKnow) {
+    const again =
+      container.querySelector<HTMLButtonElement>('[data-learn-again]');
+
+    if (!card || !answer || !showAnswer || !iKnow || !again) {
       return;
     }
 
@@ -62,17 +66,22 @@ export function mountLearnPage(
       showAnswer.setAttribute('aria-expanded', 'true');
       iKnow.hidden = false;
       iKnow.disabled = false;
+      again.hidden = false;
+      again.disabled = false;
     });
 
-    iKnow.addEventListener('click', () => {
+    function rateCard(cardId: string, learned: boolean): void {
       if (answer.hidden) {
         return;
       }
 
-      store.updateCard(card.id, { learned: true });
+      store.updateCard(cardId, { learned });
       currentIndex += 1;
       render();
-    });
+    }
+
+    iKnow.addEventListener('click', () => rateCard(card.id, true));
+    again.addEventListener('click', () => rateCard(card.id, false));
   }
 
   render();
