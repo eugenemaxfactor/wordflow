@@ -368,10 +368,75 @@ p {
 
 /* Основной контейнер страницы Vocabulary. */
 .vocabulary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--space-lg);
   padding-top: 32px;
   padding-right: 32px;
   padding-bottom: 32px;
   padding-left: 32px;
+}
+
+.vocabulary > h2 {
+  grid-row: 1;
+  grid-column: 1 / -1;
+}
+
+#vocabulary-total-words {
+  grid-row: 2;
+  grid-column: 1 / -1;
+  margin-top: var(--space-lg);
+}
+
+/* Поиск карточек по слову или переводу. */
+.vocabulary-search {
+  display: flex;
+  grid-row: 3;
+  grid-column: 1;
+  flex-direction: column;
+  width: 100%;
+  margin-top: var(--space-lg);
+  gap: var(--space-sm);
+}
+
+.vocabulary-search label {
+  color: var(--color-heading);
+  font-weight: 600;
+}
+
+.vocabulary-search__input {
+  width: 100%;
+  padding-top: 10px;
+  padding-right: 12px;
+  padding-bottom: 10px;
+  padding-left: 12px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-heading);
+  background-color: var(--color-bg);
+  font: inherit;
+  transition: border-color var(--transition-fast);
+}
+
+.vocabulary-search__input::placeholder {
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+.vocabulary-search__input:hover {
+  border-color: var(--color-border-hover);
+}
+
+.vocabulary-search__input:focus-visible {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+#vocabulary-card-list {
+  grid-row: 4;
+  grid-column: 1 / -1;
 }
 
 /* Сетка с карточками слов. */
@@ -474,8 +539,12 @@ p {
 
 /* Кнопка открытия формы добавления слова. */
 .vocabulary__add-button {
+  grid-row: 3;
+  grid-column: 2;
+  align-self: end;
+  justify-self: end;
   margin-top: var(--space-md);
-  margin-bottom: var(--space-md);
+  margin-bottom: 0;
   padding-top: 10px;
   padding-right: 16px;
   padding-bottom: 10px;
@@ -669,6 +738,24 @@ p {
     padding-right: 16px;
     padding-bottom: 16px;
     padding-left: 16px;
+    grid-template-columns: 1fr;
+  }
+
+  .vocabulary-search {
+    grid-row: 3;
+    grid-column: 1;
+  }
+
+  .vocabulary__add-button {
+    grid-row: 4;
+    grid-column: 1;
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  #vocabulary-card-list {
+    grid-row: 5;
+    grid-column: 1;
   }
 
   .vocabulary-grid {

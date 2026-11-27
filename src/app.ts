@@ -7,6 +7,8 @@ import {
   renderVocabularyPage,
   setupAddWordModal,
   setupDeleteCards,
+  setupCardSearch,
+  refreshCardList,
 } from './pages/vocabulary';
 
 // Храним идентификатор текущей активной страницы.
@@ -89,9 +91,11 @@ function renderPage(): void {
     content.innerHTML = renderVocabularyPage();
 
     // Подключаем обработчики после создания HTML.
-    setupAddWordModal(renderPage);
+    setupAddWordModal(refreshCardList);
 
-    setupDeleteCards(renderPage);
+    setupDeleteCards(refreshCardList);
+
+    setupCardSearch();
 
     return;
   }

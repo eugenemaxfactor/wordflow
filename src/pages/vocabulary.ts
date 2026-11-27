@@ -5,16 +5,13 @@ import {
   hasValidCardFields,
 } from '../utils/flashcard-validation';
 import { escapeHtml } from '../utils/escape-html';
+import { filterFlashcards } from '../utils/filter-flashcards';
 
-// Формирует HTML-разметку страницы Vocabulary.
-export function renderVocabularyPage(): string {
-  const cards = flashcardStore.getCards();
+// Создаёт HTML для одной карточки.
+function renderCard(card: Flashcard): string {
+  const status = card.learned ? 'learned' : 'new';
 
-  // Создаёт HTML для одной карточки.
-  function renderCard(card: Flashcard): string {
-    const status = card.learned ? 'learned' : 'new';
-
-    return `
+  return `
       <article class="vocabulary-card">
         <h3 class="vocabulary-card__word">${escapeHtml(card.word)}</h3>
         <p class="vocabulary-card__translation">${escapeHtml(card.translation)}</p>
@@ -44,9 +41,36 @@ export function renderVocabularyPage(): string {
         </button>
       </article>
     `;
+}
+
+function renderCardList(cards: readonly Flashcard[]): string {
+  return cards.map(renderCard).join('');
+}
+
+function renderCardListContent(
+  cards: readonly Flashcard[],
+  query: string
+): string {
+  if (cards.length === 0) {
+    return '<p>No words yet.</p>';
   }
 
-  const cardItems = cards.map(renderCard).join('');
+  const filteredCards = filterFlashcards(cards, query);
+
+  if (filteredCards.length === 0) {
+    return '<p>No cards found.</p>';
+  }
+
+  return `
+      <div class="vocabulary-grid">
+        ${renderCardList(filteredCards)}
+      </div>
+    `;
+}
+
+// Формирует HTML-разметку страницы Vocabulary.
+export function renderVocabularyPage(): string {
+  const cards = flashcardStore.getCards();
 
   return `
     <section class="vocabulary">
@@ -58,13 +82,25 @@ export function renderVocabularyPage(): string {
       >
         + Add Word
       </button>
-      <p>Total words: ${cards.length}</p>
-      ${
-        cards.length > 0
-          ? `<div class="vocabulary-grid">${cardItems}</div>`
-          : '<p>No words yet.</p>'
-      }
+      <p id="vocabulary-total-words">Total words: ${cards.length}</p>
 
+      <div class="vocabulary-search">
+        <label for="vocabulary-search-input">
+          Search cards
+        </label>
+
+        <input
+          type="search"
+          id="vocabulary-search-input"
+          class="vocabulary-search__input"
+          placeholder="Search by word or translation..."
+          autocomplete="off"
+        />
+      </div>
+
+      <div id="vocabulary-card-list">
+        ${renderCardListContent(cards, '')}
+      </div>
 
       <dialog id="add-word-dialog" class="add-word-dialog">
         <h2 class="add-word-dialog__title">Add New Word</h2>
@@ -248,4 +284,37 @@ export function setupDeleteCards(refreshPage: () => void): void {
     // Обновляем страницу без перезагрузки браузера.
     refreshPage();
   });
+}
+
+export function refreshCardList(): void {
+  const searchInput = document.querySelector<HTMLInputElement>(
+    '#vocabulary-search-input'
+  );
+
+  const cardList = document.querySelector<HTMLElement>('#vocabulary-card-list');
+  const totalWords = document.querySelector<HTMLElement>(
+    '#vocabulary-total-words'
+  );
+
+  if (!searchInput || !cardList || !totalWords) {
+    return;
+  }
+
+  const cards = flashcardStore.getCards();
+  const query = searchInput.value;
+
+  totalWords.textContent = `Total words: ${cards.length}`;
+  cardList.innerHTML = renderCardListContent(cards, query);
+}
+
+export function setupCardSearch(): void {
+  const searchInput = document.querySelector<HTMLInputElement>(
+    '#vocabulary-search-input'
+  );
+
+  if (!searchInput) {
+    return;
+  }
+
+  searchInput.addEventListener('input', refreshCardList);
 }
