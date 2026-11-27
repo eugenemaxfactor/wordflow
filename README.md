@@ -2,6 +2,25 @@
 
 English vocabulary learning app built with TypeScript
 
+## Live Demo
+
+[Open WordFlow on GitHub Pages](https://eugenemaxfactor.github.io/wordflow/)
+
+## Production Deployment
+
+WordFlow is deployed to GitHub Pages from the `main` branch. The deployment
+workflow installs dependencies with `npm ci`, runs the project quality checks,
+creates the production build with `npm run build`, and publishes the generated
+`dist` directory.
+
+The Vite base path is set to `/wordflow/` in `vite.config.ts` because the site
+is published as a GitHub Pages repository site. No deployment secrets or local
+environment files are required.
+
+Deployment runs automatically after a push to `main`. It can also be started
+manually from the **Actions → Deploy to GitHub Pages** page with the
+`workflow_dispatch` action.
+
 ## Development / Code Quality
 
 Install dependencies with `npm ci` before running the checks locally.
