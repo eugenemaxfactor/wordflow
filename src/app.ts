@@ -1,11 +1,14 @@
 import type { Page } from './types/navigation';
 import { renderAboutPage } from './pages/about';
 import { mountLearnPage } from './pages/learn';
+import { renderStatisticsPage } from './pages/statistics';
 import { flashcardStore } from './store';
 import {
   renderVocabularyPage,
   setupAddWordModal,
   setupDeleteCards,
+  setupCardSearch,
+  refreshCardList,
 } from './pages/vocabulary';
 
 // Храним идентификатор текущей активной страницы.
@@ -88,9 +91,11 @@ function renderPage(): void {
     content.innerHTML = renderVocabularyPage();
 
     // Подключаем обработчики после создания HTML.
-    setupAddWordModal(renderPage);
+    setupAddWordModal(refreshCardList);
 
-    setupDeleteCards(renderPage);
+    setupDeleteCards(refreshCardList);
+
+    setupCardSearch();
 
     return;
   }
@@ -107,8 +112,11 @@ function renderPage(): void {
     return;
   }
 
-  // Раздел статистики пока не реализован.
-  content.innerHTML = `<h2>${activePage}</h2>`;
+  // Для страницы Statistics используем отдельный модуль.
+  if (activePage === 'statistics') {
+    content.innerHTML = renderStatisticsPage(flashcardStore.getCards());
+    return;
+  }
 }
 
 // Выделяем кнопку текущей активной страницы.
